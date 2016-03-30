@@ -117,7 +117,7 @@ public class slOeuvres extends HttpServlet {
         } catch (Exception e) {
             erreur = e.getMessage();
             if(erreur.contains("FK_RESERVATION_OEUVRE"))
-                erreur = "Il n'est pas possible de supprimer l'oeuvre : " + titre + " car elle a été réservée !";            
+                erreur = "Il n'est pas possible de supprimer l'oeuvre : "/* + titre */+ " car elle a été réservée !";            
             throw new Exception(erreur);
         }
     }    

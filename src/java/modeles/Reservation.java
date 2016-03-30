@@ -23,8 +23,8 @@ public class Reservation {
     public Reservation(int id_oeuvre, int id_adherent) throws Exception {
         setId_oeuvre(id_oeuvre);
         setId_adherent(id_adherent);
-        this.setAdherent(new Adherent().lire_Id(id_adherent));
-        this.setOeuvre(new Oeuvre().lire_Id(id_oeuvre));
+        /*this.setAdherent(new Adherent().lire_Id(id_adherent));
+        this.setOeuvre(new Oeuvre().lire_Id(id_oeuvre));*/
         this.setDate_reservation(date_reservation);
         this.setStatut(statut);
     }
