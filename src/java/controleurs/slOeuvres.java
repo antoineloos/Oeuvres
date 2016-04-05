@@ -6,6 +6,7 @@ package controleurs;
 
 import dal.UserDao;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -217,15 +218,45 @@ public class slOeuvres extends HttpServlet {
      * @throws Exception
      */
     private String listerOeuvres(HttpServletRequest request) throws Exception {
-
+        OeuvreDao oeuvreDao;
         try {
-
+            List<Oeuvre> lstOeuvre = oeuvreDao.liste();
+            HttpSession session = request.getSession(true);
+            request.setAttribute("lstOeuvresR", lstOeuvre);
+            
             return ("/catalogue.jsp");
         } catch (Exception e) {
             throw e;
         }
     }
 
+    /**
+     * 
+      private String connecter(HttpServletRequest request) throws Exception {
+        UserDao userDao;
+        String login, pwd;
+        String vueReponse = "/login.jsp";
+        erreur = "";
+        try {
+            login = request.getParameter("txtLogin");
+            pwd = request.getParameter("txtPwd");
+            userDao = new UserDao();
+            if (userDao.connecter(login, pwd)) {
+                Proprietaire user = userDao.getUser();
+                vueReponse = "/home.jsp";
+                HttpSession session = request.getSession(true);
+                session.setAttribute("userId", user.getId_proprietaire());
+                request.setAttribute("userR", user);
+            } else {
+                erreur = "Login ou mot de passe inconnus !";
+            }
+        } catch (Exception e) {
+            erreur = e.getMessage();
+        } finally {
+            return (vueReponse);
+        }
+    }
+     */
     /**
      * Extrait le texte de la demande de l'URL
      *
