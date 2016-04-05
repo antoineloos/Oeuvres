@@ -4,6 +4,7 @@
  */
 package controleurs;
 
+import dal.UserDao;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,7 +23,9 @@ public class slOeuvres extends HttpServlet {
     private String erreur;
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -37,9 +40,9 @@ public class slOeuvres extends HttpServlet {
             demande = getDemande(request);
             if (demande.equalsIgnoreCase("login.oe")) {
                 vueReponse = login(request);
-            } else  if (demande.equalsIgnoreCase("connecter.oe")) {
+            } else if (demande.equalsIgnoreCase("connecter.oe")) {
                 vueReponse = connecter(request);
-            } else  if (demande.equalsIgnoreCase("deconnecter.oe")) {
+            } else if (demande.equalsIgnoreCase("deconnecter.oe")) {
                 vueReponse = deconnecter(request);
             } else if (demande.equalsIgnoreCase("ajouter.oe")) {
                 vueReponse = creerOeuvre(request);
@@ -51,22 +54,24 @@ public class slOeuvres extends HttpServlet {
                 vueReponse = listerOeuvres(request);
             } else if (demande.equalsIgnoreCase("supprimer.oe")) {
                 vueReponse = supprimerOeuvre(request);
-            }  
+            }
         } catch (Exception e) {
             erreur = e.getMessage();
         } finally {
             request.setAttribute("erreurR", erreur);
-            request.setAttribute("pageR", vueReponse);            
+            request.setAttribute("pageR", vueReponse);
             RequestDispatcher dsp = request.getRequestDispatcher("/index.jsp");
-            if (vueReponse.contains(".oe"))
+            if (vueReponse.contains(".oe")) {
                 dsp = request.getRequestDispatcher(vueReponse);
+            }
             dsp.forward(request, response);
         }
     }
 
     /**
-     * Enregistre une oeuvre qui a été soit créée (id_oeuvre = 0)
-     * soit modifiée (id_oeuvre > 0)
+     * Enregistre une oeuvre qui a été soit créée (id_oeuvre = 0) soit modifiée
+     * (id_oeuvre > 0)
+     *
      * @param request
      * @return String page de redirection
      * @throws Exception
@@ -86,6 +91,7 @@ public class slOeuvres extends HttpServlet {
 
     /**
      * Lit et affiche une oeuvre pour pouvoir la modifier
+     *
      * @param request
      * @return String page de redirection
      * @throws Exception
@@ -104,6 +110,7 @@ public class slOeuvres extends HttpServlet {
 
     /**
      * Supprimer une oeuvre
+     *
      * @param request
      * @return String page de redirection
      * @throws Exception
@@ -112,19 +119,21 @@ public class slOeuvres extends HttpServlet {
         String vueReponse;
         try {
 
-            vueReponse = "catalogue.oe";           
-            return (vueReponse);  
+            vueReponse = "catalogue.oe";
+            return (vueReponse);
         } catch (Exception e) {
             erreur = e.getMessage();
-            if(erreur.contains("FK_RESERVATION_OEUVRE"))
-                erreur = "Il n'est pas possible de supprimer l'oeuvre : "/* + titre */+ " car elle a été réservée !";            
+            if (erreur.contains("FK_RESERVATION_OEUVRE")) {
+                erreur = "Il n'est pas possible de supprimer l'oeuvre : "/* + titre */ + " car elle a été réservée !";
+            }
             throw new Exception(erreur);
         }
-    }    
+    }
+
     /**
-     * Affiche le formulaire vide d'une oeuvre
-     * Initialise la liste des propriétaires
-     * Initialise le titre de la page
+     * Affiche le formulaire vide d'une oeuvre Initialise la liste des
+     * propriétaires Initialise le titre de la page
+     *
      * @param request
      * @return String page de redirection
      * @throws Exception
@@ -143,36 +152,54 @@ public class slOeuvres extends HttpServlet {
 
     /**
      * Vérifie que l'utilisateur a saisi le bon login et mot de passe
+     *
      * @param request
      * @return String page de redirection
      * @throws Exception
      */
     private String connecter(HttpServletRequest request) throws Exception {
+        UserDao userDao;
+        String login, pwd;
+        String vueReponse = "/login.jsp";
+        erreur = "";
+        try {
+            login = request.getParameter("txtLogin");
+            pwd = request.getParameter("txtPwd");
+            userDao = new UserDao();
+            if (userDao.connecter(login, pwd)) {
+                Proprietaire user = userDao.getUser();
+                vueReponse = "/home.jsp";
+                HttpSession session = request.getSession(true);
+                session.setAttribute("userId", user.getId_proprietaire());
+                request.setAttribute("userR", user);
+            } else {
+                erreur = "Login ou mot de passe inconnus !";
+            }
+        } catch (Exception e) {
+            erreur = e.getMessage();
+        } finally {
+            return (vueReponse);
+        }
+    }
+
+    private String deconnecter(HttpServletRequest request) throws Exception {
         String vueReponse;
         try {
+            HttpSession session = request.getSession(true);
+            session.setAttribute("userId", null);
             vueReponse = "/home.jsp";
-           
             return (vueReponse);
         } catch (Exception e) {
             throw e;
         }
     }
 
-    private String deconnecter(HttpServletRequest request) throws Exception {
-        try {
-            HttpSession session = request.getSession(true);
-            session.setAttribute("userId", null);
-            return ("/home.jsp");
-        } catch (Exception e) {
-            throw e;
-        }
-    } 
-    
     /**
      * Afficher la page de login
+     *
      * @param request
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     private String login(HttpServletRequest request) throws Exception {
         try {
@@ -180,15 +207,17 @@ public class slOeuvres extends HttpServlet {
         } catch (Exception e) {
             throw e;
         }
-    }    
+    }
+
     /**
      * liste des oeuvres pour le catalogue
+     *
      * @param request
      * @return String page de redirection
      * @throws Exception
      */
     private String listerOeuvres(HttpServletRequest request) throws Exception {
-        
+
         try {
 
             return ("/catalogue.jsp");
@@ -199,6 +228,7 @@ public class slOeuvres extends HttpServlet {
 
     /**
      * Extrait le texte de la demande de l'URL
+     *
      * @param request
      * @return String texte de la demande
      */
@@ -210,8 +240,9 @@ public class slOeuvres extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -223,8 +254,9 @@ public class slOeuvres extends HttpServlet {
         processRequest(request, response);
     }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -236,8 +268,9 @@ public class slOeuvres extends HttpServlet {
         processRequest(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override
