@@ -95,12 +95,24 @@ public abstract class Dao {
      * @throws Exception
      */
     protected void transaction(List<String> lRequetes, Map mParams, String cle) throws Exception {
+        PreparedStatement ps = null;
         Connection connection = null;
-
+        int cptParam = 0;
         try {
-
+            connection = connecter();
+            connection.setAutoCommit(false);
+            for (String requete : lRequetes) {
+                if (requete.contains(":id")) {
+                    int id = getIdentifiant(connection, cle);
+                    requete = requete.replace(":id", "" + id);
+                }
+                ps = connection.prepareStatement(requete);
+                setParametres(ps, (Map) mParams.get(cptParam++));
+                ps.executeUpdate();
+            }
+            connection.commit();
         } catch (Exception e) {
-
+            connection.rollback();
             throw e;
         } finally {
             try {
@@ -163,20 +175,20 @@ public abstract class Dao {
         try {
             connection = connecter();
             ps = connection.prepareStatement(requete);
-            setParametres(ps, (Map)mParams.get(0));
+            setParametres(ps, (Map) mParams.get(0));
             rs = ps.executeQuery();
             ResultSetMetaData rsm = rs.getMetaData();
             int nbColonnes = rsm.getColumnCount();
             int cptRecord = 0;
             while (rs.next()) {
                 mRecord = new HashMap();
-                for(int i = 1; i <= nbColonnes; i++){
+                for (int i = 1; i <= nbColonnes; i++) {
                     String nomColonne = rsm.getColumnName(i).toLowerCase();
                     mRecord.put(nomColonne, rs.getObject(rsm.getColumnName(i)));
                 }
-                mResults.put(cptRecord++, mRecord);                
+                mResults.put(cptRecord++, mRecord);
             }
-            
+
             return (mResults);
         } catch (Exception e) {
             throw e;
