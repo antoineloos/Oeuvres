@@ -160,7 +160,8 @@ public class slOeuvres extends HttpServlet {
 
     private String deconnecter(HttpServletRequest request) throws Exception {
         try {
-            
+            HttpSession session = request.getSession(true);
+            session.setAttribute("userId", null);
             return ("/home.jsp");
         } catch (Exception e) {
             throw e;
