@@ -38,7 +38,7 @@ public abstract class Dao {
      * @return Connexion à la base de données
      * @throws Exception
      */
-    protected Connection connecter() throws Exception {
+    private Connection connecter() throws Exception {
         Context initCtx, envCtx;
         DataSource ds;
         Connection connection;
