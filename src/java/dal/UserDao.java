@@ -8,6 +8,7 @@ package dal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +114,7 @@ public class UserDao extends Dao {
     public Proprietaire lire_Id(int id) throws Exception {
 
         try {
-
+            
         } catch (Exception e) {
             throw e;
         }
@@ -129,41 +130,24 @@ public class UserDao extends Dao {
      * @throws Exception
      */
     public Proprietaire lire_Login(String login) throws Exception {
-
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Connection connection = null;
+        Map mParams = new HashMap();
+        Map mParam;
+        Map mResults;
         try {
-            connection = super.connecter();
-            ps = connection.prepareStatement(
-                    "select * from proprietaire where login = ?");
-            ps.setString(1, login);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-               return setProperties(rs);
-                
+            String requete = "select * from proprietaire where login = ?";
+            mParam = new HashMap();
+            mParam.put(1, login);
+            mParams.put(0, mParam);
+            mResults = lecture(requete, mParams);
+            if (mResults.size() > 0) {
+                Map mRecord = (Map)mResults.get(0);
+                return(setProperties(mRecord));
             } else {
                 throw new Exception("Utilisateur inconnu !");
-
             }
         } catch (Exception e) {
             throw e;
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
-
     }
 
     /**
@@ -179,7 +163,7 @@ public class UserDao extends Dao {
 
         try {
             boolean retour = false;
-            lire_Login(login);
+            this.user =  lire_Login(login);
             if (pwd.equals(user.getPwd())) {
                 retour = true;
             }
@@ -197,15 +181,15 @@ public class UserDao extends Dao {
      * @return objet Métier Proprietaire
      * @throws Exception
      */
-    private Proprietaire setProperties(ResultSet mRecord) throws Exception {
-
+    private Proprietaire setProperties(Map mRecord) throws Exception {
+            Proprietaire user;
         try {
-            
-             user.setId_proprietaire(mRecord.getInt("id_proprietaire"));
-                user.setNom_proprietaire(mRecord.getString("nom_proprietaire"));
-                user.setPrenom_proprietaire(mRecord.getString("prenom_proprietaire"));
-                user.setLogin(mRecord.getString("login"));
-                user.setPwd(mRecord.getString("pwd"));
+                user = new Proprietaire();
+                user.setId_proprietaire((Integer)mRecord.get("id_proprietaire"));
+                user.setNom_proprietaire(mRecord.get("nom_proprietaire").toString());
+                user.setPrenom_proprietaire(mRecord.get("prenom_proprietaire").toString());
+                user.setLogin(mRecord.get("login").toString());
+                user.setPwd(mRecord.get("pwd").toString());
              
             return user;
         } catch (Exception e) {
