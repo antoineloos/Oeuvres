@@ -53,7 +53,7 @@ public class OeuvreDao extends Dao {
             // récupérer la valeur correspondante
             oeuvre.setId_oeuvre(((Integer)(mRecord.get("id_oeuvre"))));
             oeuvre.setId_proprietaire(((Integer)(mRecord.get("id_proprietaire"))));
-            oeuvre.setPrix((Integer)mRecord.get("prix"));
+            oeuvre.setPrix(Double.parseDouble(mRecord.get("prix").toString()));
             oeuvre.setTitre(mRecord.get("titre").toString());
             
             // Il faut aller chercher la catégorie du User
