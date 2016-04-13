@@ -36,7 +36,7 @@ public class slOeuvres extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String demande;
-        String vueReponse = "/home.jsp";
+        String vueReponse = "/index.jsp";
         erreur = "";
         try {
             demande = getDemande(request);
