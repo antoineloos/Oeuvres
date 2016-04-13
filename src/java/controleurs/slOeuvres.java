@@ -4,6 +4,7 @@
  */
 package controleurs;
 
+import dal.OeuvreDao;
 import dal.UserDao;
 import java.io.IOException;
 import java.util.List;
@@ -218,7 +219,7 @@ public class slOeuvres extends HttpServlet {
      * @throws Exception
      */
     private String listerOeuvres(HttpServletRequest request) throws Exception {
-        OeuvreDao oeuvreDao;
+        OeuvreDao oeuvreDao = new  OeuvreDao();
         try {
             List<Oeuvre> lstOeuvre = oeuvreDao.liste();
             HttpSession session = request.getSession(true);
