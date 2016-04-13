@@ -113,12 +113,24 @@ public class UserDao extends Dao {
      */
     public Proprietaire lire_Id(int id) throws Exception {
 
+        Map mParams = new HashMap();
+        Map mParam;
+        Map mResults;
         try {
-            
+            String requete = "select * from proprietaire where id_proprietaire = ?";
+            mParam = new HashMap();
+            mParam.put(1, id);
+            mParams.put(0, mParam);            
+            mResults = lecture(requete, mParams);
+            if (mResults.size() > 0) {
+                Map mRecord = (Map)mResults.get(0);
+                return(setProperties(mRecord));
+            }  else {
+                throw new Exception("Proprietaire inconnu !");
+            }
         } catch (Exception e) {
             throw e;
-        }
-        return null;
+        } 
     }
 
     /**
