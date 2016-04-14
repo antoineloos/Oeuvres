@@ -95,6 +95,9 @@ public class slOeuvres extends HttpServlet {
             oeuvre.setTitre(request.getParameter("txtTitre"));
 
             oeuvreDo.ajouter(oeuvre);
+            List<Oeuvre> lstOeuvre = oeuvreDo.liste();
+            HttpSession session = request.getSession(true);
+            request.setAttribute("lstOeuvresR", lstOeuvre);
             vueReponse = "/catalogue.jsp";
             return (vueReponse);
         } catch (Exception e) {
