@@ -64,4 +64,31 @@ public class OeuvreDao extends Dao {
             throw e;
         }
     }
+    
+    public void ajouter(Oeuvre oeuvre) throws Exception {
+        // Dictionnaire des paramÃ¨tres qui seront
+        // affectÃ©s Ã  la requÃªte        
+        Map mParams = new HashMap();
+        Map mParam;
+        try {
+            String requete = "insert into oeuvre (titre, prix, id_proprietaire, id_oeuvre)";
+            requete += " values (?, ?, ?, :id)";
+            // On ajoute chaque paramÃ¨tre au Dictionnaire
+            // en spÃ©cifiant sa place dans la requÃªte 
+            mParam = new HashMap();
+            mParam.put(1, oeuvre.getTitre());
+            mParam.put(2, oeuvre.getPrix());
+            mParam.put(3, oeuvre.getId_proprietaire());
+            mParams.put(0, mParam);
+            List<String> lRequetes = new ArrayList<String>();
+            // On utilise une collection de requÃªtes car c'est
+            // ce qu'attend la mÃ©thode transaction() en paramÃ¨tre
+            lRequetes.add(requete);
+            // Le troisiÃ¨me paramÃ¨tre servira Ã  gÃ©nÃ©rer
+            // l'Id du nouvel Utilisateur
+            transaction(lRequetes, mParams, "OEUVRE");
+        } catch (Exception e) {
+            throw e;
+        }
+    }
 }

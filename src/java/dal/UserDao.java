@@ -8,6 +8,7 @@ package dal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -58,6 +59,38 @@ public class UserDao extends Dao {
 //        }
 //    }
 
+    
+    public List<Proprietaire> liste() throws Exception {
+        // Dictionnaire de paramètres pour la
+        // requête SQL, ici il sera vide, mais
+        // la méthode lecture() attend ce paramètre
+        Map mParams = new HashMap();
+        Map mParam = new HashMap();
+        mParams.put(0, mParam);
+        // Dictionnaire recevant les enregistrements lus
+        Map mResults;
+        // La collection de User à retourner
+        List<Proprietaire> lProprietaire = new ArrayList<Proprietaire>();
+        try {
+
+            String requete = "select * from proprietaire";
+            // Lecture des User dans la BdD
+            mResults = lecture(requete, mParams);
+            // Chaque enregistrement est référencé par un indice
+            // Pour chaque item du Dictionnaire
+            for (Object record :mResults.keySet()) {
+                // On récuprère le Dictionnaire de l'enregistrement
+                Map mRecord = (Map)mResults.get(record);
+                // On l'envoie pour affectation des données portées
+                // à l'objet Métier User qui ajouté à la Collection
+                lProprietaire.add(setProperties(mRecord));
+            }
+            return (lProprietaire);
+        }
+        catch (Exception e) {
+            throw e;
+        }
+    }
     /**
      * Mise à jour d'un Utilisateur dans la BdD
      *
@@ -90,17 +123,29 @@ public class UserDao extends Dao {
         // Dictionnaire des paramètres qui seront
         // affectés à la requête        
 
+        Map mParams = new HashMap();
+        Map mParam;
         try {
-
+            String requete = "insert into utilisateur (nom, prenom, login, pwd, id_utilisateur)";
+            requete += " values (?, ?, ?, ?, ?, :id)";
             // On ajoute chaque paramètre au Dictionnaire
             // en spécifiant sa place dans la requête 
+            mParam = new HashMap();
+            mParam.put(1, user.getNom_proprietaire());
+            mParam.put(2, user.getPrenom_proprietaire());
+            mParam.put(3, user.getLogin());
+            mParam.put(4, user.getPwd());
+            mParams.put(0, mParam);
+            List<String> lRequetes = new ArrayList<String>();
             // On utilise une collection de requêtes car c'est
             // ce qu'attend la méthode transaction() en paramètre
+            lRequetes.add(requete);
             // Le troisième paramètre servira à générer
             // l'Id du nouvel Utilisateur
+            transaction(lRequetes, mParams, "PROPRIETAIRE");
         } catch (Exception e) {
             throw e;
-        }
+        } 
     }
 
     /**

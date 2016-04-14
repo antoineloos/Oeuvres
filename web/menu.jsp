@@ -24,7 +24,10 @@
                     </ul> 
                     <ul class="nav navbar-nav">
                         <li><a href="listeReservations.res">Réservations</a></li>
-                    </ul>     
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li><a href="listeReservations.res">Profil</a></li>
+                    </ul>
                 </c:if>
                 <ul class="nav navbar-nav navbar-right"> 
                     <c:if test="${sessionScope.userId != null}">
@@ -32,6 +35,7 @@
                     </c:if>  
                     <c:if test="${sessionScope.userId == null}">                   
                         <li><a href="login.oe">Se connecter</a></li>
+                        <li><a href="ajouterUser.oe">S'inscrire</a></li>
                     </c:if>  
                 </ul>
             </div>

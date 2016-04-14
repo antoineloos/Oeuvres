@@ -65,7 +65,7 @@ public abstract class Dao {
     private int getIdentifiant(Connection connection, String id) throws Exception {
         CallableStatement cs = null;
         try {
-            cs = connection.prepareCall("{? = call generer_pk(?)}");
+            cs = connection.prepareCall("{? = call inc_parametre(?)}");
             cs.registerOutParameter(1, Types.INTEGER);
             cs.setString(2, id);
             cs.execute();

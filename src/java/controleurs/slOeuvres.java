@@ -44,7 +44,9 @@ public class slOeuvres extends HttpServlet {
                 vueReponse = login(request);
             } else if (demande.equalsIgnoreCase("connecter.oe")) {
                 vueReponse = connecter(request);
-            } else if (demande.equalsIgnoreCase("deconnecter.oe")) {
+            }
+            
+            else if (demande.equalsIgnoreCase("deconnecter.oe")) {
                 vueReponse = deconnecter(request);
             } else if (demande.equalsIgnoreCase("ajouter.oe")) {
                 vueReponse = creerOeuvre(request);
@@ -81,10 +83,19 @@ public class slOeuvres extends HttpServlet {
     private String enregistrerOeuvre(HttpServletRequest request) throws Exception {
 
         String vueReponse;
-
+        int id_oeuvre;
         try {
+            OeuvreDao oeuvreDo = new OeuvreDao();
+            Oeuvre oeuvre = new Oeuvre();
+           // request.getParameter("id");
+           // id_oeuvre = Integer.parseInt(request.getParameter("id").toString());
+         //   oeuvre.setId_oeuvre(id_oeuvre);
+            oeuvre.setId_proprietaire(((int)Integer.parseInt(request.getParameter("lProprietaires"))));
+            oeuvre.setPrix(Integer.parseInt(request.getParameter("txtPrix")));
+            oeuvre.setTitre(request.getParameter("txtTitre"));
 
-            vueReponse = "catalogue.oe";
+            oeuvreDo.ajouter(oeuvre);
+            vueReponse = "/catalogue.jsp";
             return (vueReponse);
         } catch (Exception e) {
             throw e;
@@ -141,9 +152,12 @@ public class slOeuvres extends HttpServlet {
      * @throws Exception
      */
     private String creerOeuvre(HttpServletRequest request) throws Exception {
-
+        UserDao userDao = new UserDao();
         String vueReponse;
         try {
+            List<Proprietaire> lstProprietairesR = userDao.liste();
+            HttpSession session = request.getSession(true);
+            request.setAttribute("lstProprietairesR", lstProprietairesR);
 
             vueReponse = "/oeuvre.jsp";
             return (vueReponse);
