@@ -56,6 +56,8 @@ public class slOeuvres extends HttpServlet {
                 vueReponse = listerOeuvres(request);
             } else if (demande.equalsIgnoreCase("supprimer.oe")) {
                 vueReponse = supprimerOeuvre(request);
+            } else if (demande.equalsIgnoreCase("index.oe")) {
+                vueReponse = "/home.jsp";
             }
         } catch (Exception e) {
             erreur = e.getMessage();
@@ -82,21 +84,22 @@ public class slOeuvres extends HttpServlet {
 
         String vueReponse = "/catalogue.jsp";
         int id_oeuvre = 0;
-        int id_proprietaire = 0;double prix = 0;
+        int id_proprietaire = 0;
+        double prix = 0;
         OeuvreDao oeuvreDo = new OeuvreDao();
         try {
-            
+
             Oeuvre oeuvre = new Oeuvre();
-            if(request.getParameter("id") != ""){
+            if (request.getParameter("id") != "") {
                 id_oeuvre = Integer.parseInt(request.getParameter("id"));
             }
-            
+
             oeuvre.setId_oeuvre(id_oeuvre);
-            if(request.getParameter("lProprietaires") != ""){
+            if (request.getParameter("lProprietaires") != "") {
                 id_proprietaire = Integer.parseInt(request.getParameter("lProprietaires"));
             }
             oeuvre.setId_proprietaire(id_proprietaire);
-            if(request.getParameter("txtPrix") != ""){
+            if (request.getParameter("txtPrix") != "") {
                 prix = Double.parseDouble(request.getParameter("txtPrix"));
             }
             oeuvre.setPrix(prix);
@@ -106,17 +109,17 @@ public class slOeuvres extends HttpServlet {
             } else {
                 oeuvreDo.ajouter(oeuvre);
             }
-            
+
         } catch (Exception e) {
             erreur = "Erreur lors de l'enregistrement, veuillez réitérer l'opération !!!";
             throw e;
-        }finally{
+        } finally {
             List<Oeuvre> lstOeuvre = oeuvreDo.liste();
             HttpSession session = request.getSession(true);
             request.setAttribute("lstOeuvresR", lstOeuvre);
             return (vueReponse);
         }
-        
+
     }
 
     /**
