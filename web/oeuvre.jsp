@@ -31,3 +31,30 @@
         </div>
     </form>
 </div>
+<script>
+    $(document).ready(function () {
+      /**  function verifInt(champ)
+        {
+            alert("sze");//return verifInt(this.txtPrix)
+            var age = parseInt(champ.value);
+            if (isNaN(age) || age < 0)
+            {
+                surligne(champ, true);
+                return false;
+            }
+            else
+            {
+                surligne(champ, false);
+                return true;
+            }
+        }
+        function surligne(champ, erreur)
+        {
+            if (erreur)
+                champ.style.backgroundColor = "#fba";
+            else
+                champ.style.backgroundColor = "";
+        }*/
+    });
+
+</script>

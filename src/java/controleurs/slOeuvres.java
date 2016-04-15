@@ -44,9 +44,7 @@ public class slOeuvres extends HttpServlet {
                 vueReponse = login(request);
             } else if (demande.equalsIgnoreCase("connecter.oe")) {
                 vueReponse = connecter(request);
-            }
-            
-            else if (demande.equalsIgnoreCase("deconnecter.oe")) {
+            } else if (demande.equalsIgnoreCase("deconnecter.oe")) {
                 vueReponse = deconnecter(request);
             } else if (demande.equalsIgnoreCase("ajouter.oe")) {
                 vueReponse = creerOeuvre(request);
@@ -82,27 +80,43 @@ public class slOeuvres extends HttpServlet {
      */
     private String enregistrerOeuvre(HttpServletRequest request) throws Exception {
 
-        String vueReponse;
-        int id_oeuvre;
+        String vueReponse = "/catalogue.jsp";
+        int id_oeuvre = 0;
+        int id_proprietaire = 0;double prix = 0;
+        OeuvreDao oeuvreDo = new OeuvreDao();
         try {
-            OeuvreDao oeuvreDo = new OeuvreDao();
+            
             Oeuvre oeuvre = new Oeuvre();
-           // request.getParameter("id");
-           // id_oeuvre = Integer.parseInt(request.getParameter("id").toString());
-         //   oeuvre.setId_oeuvre(id_oeuvre);
-            oeuvre.setId_proprietaire(((int)Integer.parseInt(request.getParameter("lProprietaires"))));
-            oeuvre.setPrix(Integer.parseInt(request.getParameter("txtPrix")));
+            if(request.getParameter("id") != ""){
+                id_oeuvre = Integer.parseInt(request.getParameter("id"));
+            }
+            
+            oeuvre.setId_oeuvre(id_oeuvre);
+            if(request.getParameter("lProprietaires") != ""){
+                id_proprietaire = Integer.parseInt(request.getParameter("lProprietaires"));
+            }
+            oeuvre.setId_proprietaire(id_proprietaire);
+            if(request.getParameter("txtPrix") != ""){
+                prix = Double.parseDouble(request.getParameter("txtPrix"));
+            }
+            oeuvre.setPrix(prix);
             oeuvre.setTitre(request.getParameter("txtTitre"));
-
-            oeuvreDo.ajouter(oeuvre);
+            if (id_oeuvre > 0) {
+                oeuvreDo.modifier(oeuvre);
+            } else {
+                oeuvreDo.ajouter(oeuvre);
+            }
+            
+        } catch (Exception e) {
+            erreur = "Erreur lors de l'enregistrement, veuillez réitérer l'opération !!!";
+            throw e;
+        }finally{
             List<Oeuvre> lstOeuvre = oeuvreDo.liste();
             HttpSession session = request.getSession(true);
             request.setAttribute("lstOeuvresR", lstOeuvre);
-            vueReponse = "/catalogue.jsp";
             return (vueReponse);
-        } catch (Exception e) {
-            throw e;
         }
+        
     }
 
     /**
@@ -114,9 +128,16 @@ public class slOeuvres extends HttpServlet {
      */
     private String modifierOeuvre(HttpServletRequest request) throws Exception {
 
+        UserDao userDao = new UserDao();
         String vueReponse;
+        int id_oeuvre = Integer.parseInt(request.getParameter("id"));
         try {
-
+            OeuvreDao oeuvreDo = new OeuvreDao();
+            Oeuvre oeuvre = oeuvreDo.lire_Id(id_oeuvre);
+            List<Proprietaire> lstProprietairesR = userDao.liste();
+            HttpSession session = request.getSession(true);
+            request.setAttribute("lstProprietairesR", lstProprietairesR);
+            request.setAttribute("oeuvreR", oeuvre);
             vueReponse = "/oeuvre.jsp";
             return (vueReponse);
         } catch (Exception e) {
@@ -133,9 +154,14 @@ public class slOeuvres extends HttpServlet {
      */
     private String supprimerOeuvre(HttpServletRequest request) throws Exception {
         String vueReponse;
+        OeuvreDao oeuvreDo = new OeuvreDao();
+        int id_oeuvre = Integer.parseInt(request.getParameter("id"));
         try {
-
-            vueReponse = "catalogue.oe";
+            oeuvreDo.supprimer(id_oeuvre);
+            List<Oeuvre> lstOeuvre = oeuvreDo.liste();
+            HttpSession session = request.getSession(true);
+            request.setAttribute("lstOeuvresR", lstOeuvre);
+            vueReponse = "/catalogue.jsp";
             return (vueReponse);
         } catch (Exception e) {
             erreur = e.getMessage();
@@ -236,12 +262,12 @@ public class slOeuvres extends HttpServlet {
      * @throws Exception
      */
     private String listerOeuvres(HttpServletRequest request) throws Exception {
-        OeuvreDao oeuvreDao = new  OeuvreDao();
+        OeuvreDao oeuvreDao = new OeuvreDao();
         try {
             List<Oeuvre> lstOeuvre = oeuvreDao.liste();
             HttpSession session = request.getSession(true);
             request.setAttribute("lstOeuvresR", lstOeuvre);
-            
+
             return ("/catalogue.jsp");
         } catch (Exception e) {
             throw e;
@@ -249,31 +275,17 @@ public class slOeuvres extends HttpServlet {
     }
 
     /**
-     * 
-      private String connecter(HttpServletRequest request) throws Exception {
-        UserDao userDao;
-        String login, pwd;
-        String vueReponse = "/login.jsp";
-        erreur = "";
-        try {
-            login = request.getParameter("txtLogin");
-            pwd = request.getParameter("txtPwd");
-            userDao = new UserDao();
-            if (userDao.connecter(login, pwd)) {
-                Proprietaire user = userDao.getUser();
-                vueReponse = "/home.jsp";
-                HttpSession session = request.getSession(true);
-                session.setAttribute("userId", user.getId_proprietaire());
-                request.setAttribute("userR", user);
-            } else {
-                erreur = "Login ou mot de passe inconnus !";
-            }
-        } catch (Exception e) {
-            erreur = e.getMessage();
-        } finally {
-            return (vueReponse);
-        }
-    }
+     *
+     * private String connecter(HttpServletRequest request) throws Exception {
+     * UserDao userDao; String login, pwd; String vueReponse = "/login.jsp";
+     * erreur = ""; try { login = request.getParameter("txtLogin"); pwd =
+     * request.getParameter("txtPwd"); userDao = new UserDao(); if
+     * (userDao.connecter(login, pwd)) { Proprietaire user = userDao.getUser();
+     * vueReponse = "/home.jsp"; HttpSession session = request.getSession(true);
+     * session.setAttribute("userId", user.getId_proprietaire());
+     * request.setAttribute("userR", user); } else { erreur = "Login ou mot de
+     * passe inconnus !"; } } catch (Exception e) { erreur = e.getMessage(); }
+     * finally { return (vueReponse); } }
      */
     /**
      * Extrait le texte de la demande de l'URL
