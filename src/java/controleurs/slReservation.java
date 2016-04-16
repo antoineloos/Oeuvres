@@ -5,7 +5,12 @@
 
 package controleurs;
 
+import dal.AdherentDao;
+import dal.OeuvreDao;
+import dal.ReservationDao;
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -96,9 +101,13 @@ public class slReservation extends HttpServlet {
      * @throws Exception
      */
     private String listeReservations(HttpServletRequest request) throws Exception {
-        
+        ReservationDao reservationDao = new ReservationDao();
         try {
+            List<Reservation> lstReservation =  reservationDao.liste();
+            HttpSession session = request.getSession(true);
+            request.setAttribute("lstOeuvresR", lstReservation);
 
+            
             return ("/listereservations.jsp");
         } catch (Exception e) {
             throw e;
@@ -113,15 +122,42 @@ public class slReservation extends HttpServlet {
      */
     private String enregistrerReservation(HttpServletRequest request) throws Exception {
         
-        try {
-            
-            return ("listeReservations.res");
-        } catch (Exception e) {
-            erreur = e.getMessage();
-            if(erreur.contains("PRIMARY"))
-                erreur = "L'oeuvre " /*+ titre */+ " a déjà été réservée pour le : " + /*date + */" !";            
-            throw new Exception(erreur);
-        }
+//        try {
+//            String vueReponse = "/catalogue.jsp";
+//        int id_oeuvre = 0;
+//        int id_adherent = 0;
+//        java.util.Date date = new Date();
+//        ReservationDao reservationDao = new ReservationDao();
+//        try {
+//
+//            Reservation reservation = new Reservation();
+//            if (request.getParameter("id") != "") {
+//                id_oeuvre = Integer.parseInt(request.getParameter("id"));
+//            }
+//            reservation.setId_oeuvre(id_oeuvre);
+//            
+//            if (request.getParameter("lstAdherents") != "") {
+//                id_adherent = Integer.parseInt(request.getParameter("lstAdherents"));
+//            }
+//            reservation.setId_adherent(id_adherent);
+//            if (request.getParameter("txtPrix") != "") {
+//                prix = Double.parseDouble(request.getParameter("txtPrix"));
+//            }
+//            oeuvre.setPrix(prix);
+//            oeuvre.setTitre(request.getParameter("txtTitre"));
+//            if (id_oeuvre > 0) {
+//                reservationDao.modifier(reservation);
+//            } else {
+//                reservationDao.ajouter(reservation);
+//            }
+//            return ("listeReservations.res");}
+//        } catch (Exception e) {
+//            erreur = e.getMessage();
+//            if(erreur.contains("PRIMARY"))
+//                erreur = "L'oeuvre " /*+ titre */+ " a déjà été réservée pour le : " + /*date + */" !";            
+//            throw new Exception(erreur);
+//        }
+        return null;
     }
 
     /**
@@ -133,8 +169,16 @@ public class slReservation extends HttpServlet {
      * @throws Exception
      */
     private String reserverOeuvre(HttpServletRequest request) throws Exception {
+        AdherentDao adherentDao = new AdherentDao();
+        OeuvreDao oeuvreDao = new OeuvreDao();
         try {
             
+           ReservationDao reservationDao = new ReservationDao();
+           Oeuvre oeuvre = oeuvreDao.lire_Id(Integer.parseInt(request.getParameter("id")));
+           List<Adherent> lstAdherent = adherentDao.liste();
+           HttpSession session = request.getSession(true);
+           request.setAttribute("lstAdherentsR", lstAdherent);
+           request.setAttribute("oeuvreR", oeuvre);      
             return ("/reservation.jsp");
         } catch (Exception e) {
             throw e;
