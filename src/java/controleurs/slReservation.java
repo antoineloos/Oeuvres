@@ -9,6 +9,8 @@ import dal.AdherentDao;
 import dal.OeuvreDao;
 import dal.ReservationDao;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
@@ -105,7 +107,7 @@ public class slReservation extends HttpServlet {
         try {
             List<Reservation> lstReservation =  reservationDao.liste();
             HttpSession session = request.getSession(true);
-            request.setAttribute("lstOeuvresR", lstReservation);
+            request.setAttribute("lstReservationsR", lstReservation);
 
             
             return ("/listereservations.jsp");
@@ -122,42 +124,50 @@ public class slReservation extends HttpServlet {
      */
     private String enregistrerReservation(HttpServletRequest request) throws Exception {
         
-//        try {
-//            String vueReponse = "/catalogue.jsp";
-//        int id_oeuvre = 0;
-//        int id_adherent = 0;
-//        java.util.Date date = new Date();
-//        ReservationDao reservationDao = new ReservationDao();
-//        try {
-//
-//            Reservation reservation = new Reservation();
-//            if (request.getParameter("id") != "") {
-//                id_oeuvre = Integer.parseInt(request.getParameter("id"));
-//            }
-//            reservation.setId_oeuvre(id_oeuvre);
-//            
-//            if (request.getParameter("lstAdherents") != "") {
-//                id_adherent = Integer.parseInt(request.getParameter("lstAdherents"));
-//            }
-//            reservation.setId_adherent(id_adherent);
-//            if (request.getParameter("txtPrix") != "") {
-//                prix = Double.parseDouble(request.getParameter("txtPrix"));
-//            }
-//            oeuvre.setPrix(prix);
-//            oeuvre.setTitre(request.getParameter("txtTitre"));
-//            if (id_oeuvre > 0) {
-//                reservationDao.modifier(reservation);
-//            } else {
-//                reservationDao.ajouter(reservation);
-//            }
-//            return ("listeReservations.res");}
-//        } catch (Exception e) {
-//            erreur = e.getMessage();
-//            if(erreur.contains("PRIMARY"))
-//                erreur = "L'oeuvre " /*+ titre */+ " a déjà été réservée pour le : " + /*date + */" !";            
-//            throw new Exception(erreur);
-//        }
-        return null;
+        
+            String vueReponse = "/catalogue.jsp";
+        int id_oeuvre = 0;
+        int id_adherent = 0;
+        java.util.Date date = new Date();
+        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yy-mm-dd");
+        ReservationDao reservationDao = new ReservationDao();
+        try {
+
+            Reservation reservation = new Reservation();
+            
+            
+            if (request.getParameter("txtDate") != "") {
+                date = DATE_FORMAT.parse(request.getParameter("txtDate"));
+            }
+            reservation.setDate_reservation(date);
+            
+            if (request.getParameter("lstAdherents") != "") {
+                id_adherent = Integer.parseInt(request.getParameter("lstAdherents"));
+            }
+            reservation.setId_adherent(id_adherent);
+            
+            if (request.getParameter("id") != "") {
+                id_oeuvre = Integer.parseInt(request.getParameter("id"));
+            }
+            reservation.setId_oeuvre(id_oeuvre);
+             
+            reservation.setStatut("attente");
+                reservationDao.ajouter(reservation);
+//            List<Oeuvre> lstOeuvre = oeuvreDo.liste();
+//            HttpSession session = request.getSession(true);
+//            request.setAttribute("lstOeuvresR", lstOeuvre);
+//            return (vueReponse);
+               List<Reservation> lstReservation = reservationDao.liste();
+               HttpSession session = request.getSession(true);
+               request.setAttribute("lstReservationsR", lstReservation);
+            return ("listeReservations.res");}
+         catch (Exception e) {
+            erreur = e.getMessage();
+            if(erreur.contains("PRIMARY"))
+                erreur = "L'oeuvre " /*+ titre */+ " a déjà été réservée pour le : " + /*date + */" !";            
+            throw new Exception(erreur);
+        }
+        
     }
 
     /**

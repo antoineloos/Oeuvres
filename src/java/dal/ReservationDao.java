@@ -99,12 +99,12 @@ public class ReservationDao extends Dao {
         Map mParams = new HashMap();
         Map mParam;
         try {
-            String requete = "insert into reservation (date, id_oeuvre, id_adherent, statut )";
-            requete += " values (?, ?, ?, ?, :id)";
+            String requete = "insert into reservation (date_reservation, id_oeuvre, id_adherent, statut )";
+            requete += " values (?, ?, ?, ?)";
             // On ajoute chaque paramÃ¨tre au Dictionnaire
             // en spÃ©cifiant sa place dans la requÃªte 
             mParam = new HashMap();
-            mParam.put(1, reservation.getDate_reservation());
+            mParam.put(1,new java.sql.Date(reservation.getDate_reservation().getTime()));
             mParam.put(2, reservation.getId_oeuvre());
             mParam.put(3, reservation.getId_adherent());
             mParam.put(4, reservation.getStatut());
