@@ -79,7 +79,7 @@ public class slReservation extends HttpServlet {
     private String confirmerReservation(HttpServletRequest request) throws Exception {
 
         try {
-
+            
             return ("listeReservations.res");
         } catch (Exception e) {
             throw e;
