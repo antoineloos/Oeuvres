@@ -15,13 +15,16 @@
     <body class="body">       
         <div class="container">
             <c:import url="/menu.jsp"/>
-            <div>
-                <c:if test="${pageR != null}">
-                    <c:import url="${pageR}"/>
-                </c:if>
-                <c:if test="${erreurR != null}">
+            <c:if test="${erreurR != null}">
                     <c:import url="/erreur.jsp"/>
-                </c:if>   
+                </c:if>
+            <div> 
+                <c:set var="url" scope="application" value="/home.jsp"/>
+                <c:if test="${pageR != null && sessionScope.userId != null}">
+                    <c:set var="url" scope="application" value="${pageR}"/>
+                </c:if>
+                <c:import url="${url}"/>
+                   
             </div>
         </div>
     </body>

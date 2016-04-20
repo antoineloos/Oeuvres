@@ -14,3 +14,14 @@ and open the template in the editor.
 .titre{
     padding-bottom: 20px;
 }
+
+.login{
+    border: 2px solid black;
+    padding: 40px;
+    background: url("../../ressources/Books.jpg");
+    color: white;
+}
+
+.alert-danger{
+    padding: 4px;
+}
