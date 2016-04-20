@@ -23,8 +23,6 @@
                         <div class="col-md-5 col-md-offset-5">
                             <button type="submit" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-log-in"></span> Valider</button>
                             <button type="submit" class="btn btn-default btn-success" formaction="ajouterUser.oe"><span class="glyphicon glyphicon-user"></span> S'inscrire</button>
-
-                            <a href="ajouterUser.oe">S'inscrire</a>
                         </div>
                     </div>
                 </form>
