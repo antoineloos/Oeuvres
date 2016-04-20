@@ -41,7 +41,7 @@
                         <span>Oeuvres</span>
                     </div>
                     <div class="panel-content">  
-                        <img src="./ressources/bibliotheque.png" height="100" width="100"> 
+                        <img src="./ressources/oeuvres.svg" height="100" width="100"> 
                     </div>
                 </div>
             </a>
@@ -51,7 +51,7 @@
                         <span>Ajouter</span>
                     </div>
                     <div class="panel-content">  
-                        <img src="./ressources/book-ajouter.png" height="100" width="100"> 
+                        <img src="./ressources/addoeuvre.svg" height="100" width="100"> 
                     </div>
                 </div>
             </a>
@@ -61,7 +61,7 @@
                         <span>Reservations</span>
                     </div>
                     <div class="panel-content">  
-                        <img src="./ressources/reservation.png" height="100" width="100"> 
+                        <img src="./ressources/cart.svg" height="100" width="100"> 
                     </div>
                 </div>
             </a>
