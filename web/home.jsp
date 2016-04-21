@@ -20,9 +20,11 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-5 col-md-offset-5">
+                        <div class="col-md-12 col-md-offset-4 ">
                             <button type="submit" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-log-in"></span> Valider</button>
-                            <button type="submit" class="btn btn-default btn-success" formaction="ajouterUser.oe"><span class="glyphicon glyphicon-user"></span> S'inscrire</button>
+                            <c:if test="${sessionScope.userId == null}">
+                                <a href="ajouter.user"><button class="btn btn-default btn-success"><span class="glyphicon glyphicon-user"></span> S'inscrire</button></a>
+                            </c:if>
                         </div>
                     </div>
                 </form>
@@ -38,7 +40,7 @@
                     <div class="panel-heading">
                         <span>Oeuvres</span>
                     </div>
-                    <span class="glyphicon glyphicon-book accueil"></span>
+                    <span class="glyphicon glyphicon-list-alt accueil"></span>
                 </div>
             </a>
             <a href="ajouter.oe" class="col-lg-4">
@@ -46,7 +48,7 @@
                     <div class="panel-heading">
                         <span>Ajouter</span>
                     </div>
-                    <span class="glyphicon glyphicon-paperclip accueil"></span>
+                    <span class="glyphicon glyphicon-plus accueil"></span>
                 </div>
             </a>
             <a href="listeReservations.res" class="col-lg-4">

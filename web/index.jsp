@@ -33,6 +33,9 @@
                     <c:if test="${pageR != null && sessionScope.userId != null}">
                         <c:set var="url" scope="application" value="${pageR}"/>
                     </c:if>
+                    <c:if test="${pageR == '/createUser.jsp' && sessionScope.userId == null}">
+                        <c:set var="url" scope="application" value="${pageR}"/>
+                    </c:if>
                     <c:import url="${url}"/>
                 </div>
                 <div class="col-md-2"></div>

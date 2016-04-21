@@ -45,3 +45,12 @@ h1{
     margin : 0;
     margin-bottom: 60px;
 }
+
+.inscription{
+    border: 2px solid black;
+    padding: 40px;
+    background: url("../../ressources/bibliotheque.jpg")no-repeat 0 -60px;
+    color: white;
+    width : 100%;
+background-size: cover;
+}
