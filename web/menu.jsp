@@ -33,10 +33,7 @@
                     <c:if test="${sessionScope.userId != null}">
                         <li><a href="deconnecter.oe">Se déconnecter</a></li>
                     </c:if>  
-                    <c:if test="${sessionScope.userId == null}">                   
-                        <!--<li><a href="login.oe">Se connecter</a></li>
-                        <li><a href="ajouterUser.oe">S'inscrire</a></li>-->
-                    </c:if>  
+
                 </ul>
             </div>
         </div>
