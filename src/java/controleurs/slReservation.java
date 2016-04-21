@@ -77,9 +77,22 @@ public class slReservation extends HttpServlet {
      * @throws Exception
      */
     private String confirmerReservation(HttpServletRequest request) throws Exception {
-
+            ReservationDao reservationDao = new ReservationDao();
+            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-mm-dd");
+            int id_oeuvre ;
+            java.util.Date dateres = new Date();
         try {
+            if (request.getParameter("dateres") != "") {
+                dateres = DATE_FORMAT.parse(request.getParameter("dateres").toString().replace("\'", ""));
+            }
             
+            
+            Reservation reservation = reservationDao.lire_date(dateres);
+            reservation.setStatut("confirmee");
+            reservationDao.modifier(reservation);
+            List<Reservation> lstReservation = reservationDao.liste();
+            HttpSession session = request.getSession(true);
+            request.setAttribute("lstReservationsR", lstReservation);
             return ("listeReservations.res");
         } catch (Exception e) {
             throw e;
@@ -152,7 +165,7 @@ public class slReservation extends HttpServlet {
             reservation.setId_oeuvre(id_oeuvre);
              
             reservation.setStatut("attente");
-                reservationDao.ajouter(reservation);
+            reservationDao.ajouter(reservation);
 //            List<Oeuvre> lstOeuvre = oeuvreDo.liste();
 //            HttpSession session = request.getSession(true);
 //            request.setAttribute("lstOeuvresR", lstOeuvre);

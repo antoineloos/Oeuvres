@@ -10,8 +10,8 @@
                 <td>Statut</td>
                 <td>Prénom adhérent</td>
                 <td>Nom adhérent</td>
-                <td>Confirmer</td>
-                <td>Supprimer</td>
+                <td> </td>
+                <td> </td>
             </tr>
         </thead>
         <tbody>
@@ -22,7 +22,10 @@
                     <td>${reservation.statut}</td>
                     <td>${reservation.adherent.prenom_adherent}</td>
                     <td>${reservation.adherent.nom_adherent}</td>
+                    <c:set var="statut" scope="session" value="${reservation.statut}"/>
+                    <c:if test="${statut=='attente'}">
                     <td><a class="btn btn-primary" href="confirmerReservation.res?id=${reservation.id_oeuvre}&dateres='<fmt:formatDate value="${reservation.date_reservation}" type="date" pattern="yyyy-MM-dd"/>'">Confirmer</a></td>
+                    </c:if>
                     <td><a class="btn btn-primary" href="supprimerReservation.res?id=${reservation.id_oeuvre}&dateres='<fmt:formatDate value="${reservation.date_reservation}" type="date" pattern="yyyy-MM-dd"/>'">Supprimer</a></td>                    
                 </tr>
             </c:forEach>                    
