@@ -9,12 +9,8 @@ and open the template in the editor.
 */
 
 .body{
-    padding-top: 80px;
+    padding-top: 100px;
 }
-.titre{
-    padding-bottom: 20px;
-}
-
 .login{
     border: 2px solid black;
     padding: 40px;
@@ -31,4 +27,21 @@ and open the template in the editor.
     position        : fixed;
     top             : 60;
     right : 0;
+}
+
+.container {
+    width: 100%;
+}
+.accueil{
+    font-size: 100px;
+    //color:#158cba;
+    color:#c0a16b;
+    padding: 20px;
+    display:block;
+    text-align:center
+}
+
+h1{
+    margin : 0;
+    margin-bottom: 60px;
 }

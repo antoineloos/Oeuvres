@@ -3,7 +3,6 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="lib/css/appStyles.css" rel="stylesheet" type="text/css"/>
         <link href="lib/jquery-ui/jquery-ui.css" rel="stylesheet" type="text/css"/>        
         <script src="lib/jquery/jquery-2.1.3.min.js" type="text/javascript"></script> 
         <script src="lib/bootstrap/js/bootstrap.js" type="text/javascript"></script>
@@ -17,25 +16,28 @@
         <c:if test="${sessionScope.css == null }">
             <link href="lib/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
         </c:if>    
+        <link href="lib/css/appStyles.css" rel="stylesheet" type="text/css"/>
 
         <title>Gestion des oeuvres</title>
     </head>
     <body class="body">  
-
-
         <div class="container">
             <c:import url="/menu.jsp"/>
             <c:if test="${erreurR != null}">
                 <c:import url="/erreur.jsp"/>
             </c:if>
-            <div> 
-                <c:set var="url" scope="application" value="/home.jsp"/>
-                <c:if test="${pageR != null && sessionScope.userId != null}">
-                    <c:set var="url" scope="application" value="${pageR}"/>
-                </c:if>
-                <c:import url="${url}"/>
-
+            <div class="raw col-md-12" >
+                <div class="col-md-2"></div>
+                <div class="col-md-8"> 
+                    <c:set var="url" scope="application" value="/home.jsp"/>
+                    <c:if test="${pageR != null && sessionScope.userId != null}">
+                        <c:set var="url" scope="application" value="${pageR}"/>
+                    </c:if>
+                    <c:import url="${url}"/>
+                </div>
+                <div class="col-md-2"></div>
             </div>
+
         </div>
         <form class="form-horizontal " role="form" method="post" id="fixe">
             <button type="submit" class="btn btn-default btn-default" formaction="dark.style">

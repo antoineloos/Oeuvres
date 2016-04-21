@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<div  class="col-md-11 col-md-offset-1">
+<div  class="col-md-12">
     <h1 align='center'>Catalogue des oeuvres</h1>
     <table class="table table-bordered table-striped">
         <thead>
