@@ -48,6 +48,9 @@ public class ReservationDao extends Dao {
         } 
     }
     
+        
+        
+        
     private Reservation setProperties(Map mRecord) throws Exception {
         Reservation reservation = new Reservation();
         try {
@@ -70,33 +73,15 @@ public class ReservationDao extends Dao {
         }
     }
     
-//    public void modifier(Oeuvre oeuvre) throws Exception {
-//        Map mParams = new HashMap();
-//        Map mParam;
-//        try {
-//            String requete = "update oeuvre set titre = ?, prix = ?, id_proprietaire = ? where id_oeuvre = ?";
-//            mParam = new HashMap();
-//            mParam.put(1, oeuvre.getTitre());
-//            mParam.put(2, oeuvre.getPrix());
-//            mParam.put(3, oeuvre.getId_proprietaire());
-//            mParam.put(4, oeuvre.getId_oeuvre());
-//            mParams.put(0, mParam);
-//            ecriture(requete, mParams);
-//        } catch (Exception e) {
-//            throw e;
-//        }
-//    }
-    
-    public void modifier (Reservation reservation) throws Exception
+    public void supprimer (Reservation reservation) throws Exception
     {
         Map mParams = new HashMap();
         Map mParam;
         try
         {
-            String requete = "update reservation set statut = ? where date_reservation = ?";
+            String requete = "delete from reservation where date_reservation = ?";
             mParam = new HashMap();
-            mParam.put(1, reservation.getStatut());
-            mParam.put(2,new java.sql.Date(reservation.getDate_reservation().getTime()));
+            mParam.put(1,new java.sql.Date(reservation.getDate_reservation().getTime()));
             mParams.put(0, mParam);
             ecriture(requete, mParams);
         }
@@ -106,15 +91,36 @@ public class ReservationDao extends Dao {
         }
     }
     
-    public Reservation lire_date(java.util.Date date) throws Exception {
+    public void modifier (Reservation reservation) throws Exception
+    {
+        Map mParams = new HashMap();
+        Map mParam;
+        try
+        {
+            String requete = "update reservation set statut = ? where date_reservation = ? && id_oeuvre = ?";
+            mParam = new HashMap();
+            mParam.put(1, reservation.getStatut());
+            mParam.put(2,new java.sql.Date(reservation.getDate_reservation().getTime()));
+            mParam.put(3, reservation.getId_oeuvre());
+            mParams.put(0, mParam);
+            ecriture(requete, mParams);
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+    }
+    
+    public Reservation lire_date(java.util.Date date,int id_oeuvre) throws Exception {
 
         Map mParams = new HashMap();
         Map mParam;
         Map mResults;
         try {
-            String requete = "select * from reservation where date_reservation = ?";
+            String requete = "select * from reservation where date_reservation = ? && id_oeuvre = ?";
             mParam = new HashMap();
             mParam.put(1, new java.sql.Date(date.getTime()));
+            mParam.put(2, id_oeuvre);
             mParams.put(0, mParam);
             mResults = lecture(requete, mParams);
             if (mResults.size() > 0) {

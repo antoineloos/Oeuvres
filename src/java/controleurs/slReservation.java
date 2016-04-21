@@ -79,15 +79,18 @@ public class slReservation extends HttpServlet {
     private String confirmerReservation(HttpServletRequest request) throws Exception {
             ReservationDao reservationDao = new ReservationDao();
             SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-mm-dd");
-            int id_oeuvre ;
+            int id_oeuvre = 0;
             java.util.Date dateres = new Date();
         try {
             if (request.getParameter("dateres") != "") {
                 dateres = DATE_FORMAT.parse(request.getParameter("dateres").toString().replace("\'", ""));
             }
+            if (request.getParameter("id") != "")
+            {
+                id_oeuvre = Integer.parseInt(request.getParameter("id"));
+            }
             
-            
-            Reservation reservation = reservationDao.lire_date(dateres);
+            Reservation reservation = reservationDao.lire_date(dateres,id_oeuvre);
             reservation.setStatut("confirmee");
             reservationDao.modifier(reservation);
             List<Reservation> lstReservation = reservationDao.liste();
@@ -101,10 +104,27 @@ public class slReservation extends HttpServlet {
 
     private String supprimerReservation(HttpServletRequest request) throws Exception {
         
+        ReservationDao reservationDao = new ReservationDao();
+            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-mm-dd");
+            int id_oeuvre = 0;
+            java.util.Date dateres = new Date();
         try {
-
+            if (request.getParameter("dateres") != "") {
+                dateres = DATE_FORMAT.parse(request.getParameter("dateres").toString().replace("\'", ""));
+            }
+            if (request.getParameter("id") != "")
+            {
+                id_oeuvre = Integer.parseInt(request.getParameter("id"));
+            }
+            
+            Reservation reservation = reservationDao.lire_date(dateres,id_oeuvre);
+            reservation.setStatut("confirmee");
+            reservationDao.supprimer(reservation);
+            List<Reservation> lstReservation = reservationDao.liste();
+            HttpSession session = request.getSession(true);
+            request.setAttribute("lstReservationsR", lstReservation);
             return ("listeReservations.res");
-        } catch (Exception e) {         
+        } catch (Exception e) {
             throw e;
         }
     }     
