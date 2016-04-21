@@ -79,9 +79,10 @@ public class ReservationDao extends Dao {
         Map mParam;
         try
         {
-            String requete = "delete from reservation where date_reservation = ?";
+            String requete = "delete from reservation where date_reservation = ? && id_oeuvre = ?";
             mParam = new HashMap();
             mParam.put(1,new java.sql.Date(reservation.getDate_reservation().getTime()));
+            mParam.put(2, reservation.getId_oeuvre());
             mParams.put(0, mParam);
             ecriture(requete, mParams);
         }
