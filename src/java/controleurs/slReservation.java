@@ -163,10 +163,12 @@ public class slReservation extends HttpServlet {
         int id_adherent = 0;
         java.util.Date date = new Date();
         SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yy-mm-dd");
+        OeuvreDao oeuvreDao = new OeuvreDao();
         ReservationDao reservationDao = new ReservationDao();
+        Reservation reservation = new Reservation();
         try {
 
-            Reservation reservation = new Reservation();
+           
             
             
             if (request.getParameter("txtDate") != "") {
@@ -193,11 +195,12 @@ public class slReservation extends HttpServlet {
                List<Reservation> lstReservation = reservationDao.liste();
                HttpSession session = request.getSession(true);
                request.setAttribute("lstReservationsR", lstReservation);
-            return ("listeReservations.res");}
+            return ("listeReservations.res");
+        }
          catch (Exception e) {
             erreur = e.getMessage();
             if(erreur.contains("PRIMARY"))
-                erreur = "L'oeuvre " /*+ titre */+ " a déjà été réservée pour le : " + /*date + */" !";            
+                erreur = "L'oeuvre "+ oeuvreDao.lire_Id(reservation.getId_oeuvre()).getTitre()+ " a déjà été réservée pour le : " + reservation.getDate_reservation().toString() +" !";            
             throw new Exception(erreur);
         }
         

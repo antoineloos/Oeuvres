@@ -7,6 +7,18 @@
             <div class="col-lg-7">
                 <form class="form-signin form-horizontal " role="form" action="inscription.user" method="post">
                     <div class="form-group">
+                        <label class="col-md-4 control-label">Nom : </label>
+                        <div class="col-md-6">
+                            <input type="text" name="txtNom"  class="form-control" placeholder="Saisir votre identifiant" required autofocus>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Prenom : </label>
+                        <div class="col-md-6">
+                            <input type="text" name="txtPrenom" class="form-control" placeholder="Saisir votre identifiant" required autofocus>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-4 control-label">Login : </label>
                         <div class="col-md-6">
                             <input type="text" name="txtLogin" class="form-control" placeholder="Saisir votre identifiant" required autofocus>

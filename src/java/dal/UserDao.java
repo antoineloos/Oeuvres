@@ -126,8 +126,8 @@ public class UserDao extends Dao {
         Map mParams = new HashMap();
         Map mParam;
         try {
-            String requete = "insert into utilisateur (nom, prenom, login, pwd, id_utilisateur)";
-            requete += " values (?, ?, ?, ?, ?, :id)";
+            String requete = "insert into proprietaire (nom_proprietaire, prenom_proprietaire, login, pwd, id_proprietaire)";
+            requete += " values (?, ?, ?, ?,:id)";
             // On ajoute chaque paramètre au Dictionnaire
             // en spécifiant sa place dans la requête 
             mParam = new HashMap();

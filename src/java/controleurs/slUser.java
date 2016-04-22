@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import modeles.Proprietaire;
 
 /**
  *
@@ -39,6 +40,11 @@ public class slUser extends HttpServlet {
             if (demande.equalsIgnoreCase("ajouter.user")) {
                 vueReponse = creerUser(request);
             } 
+            
+            else if(demande.equalsIgnoreCase("inscription.user"))
+            {
+                vueReponse = inscriptionUser(request);
+            }
         } catch (Exception e) {
             erreur = e.getMessage();
         } finally {
@@ -55,7 +61,47 @@ public class slUser extends HttpServlet {
     private String creerUser(HttpServletRequest request) throws Exception {
         String vueReponse;
         try {
+            
             vueReponse = "/createUser.jsp";
+            return (vueReponse);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+    
+    private String inscriptionUser(HttpServletRequest request) throws  Exception
+    {
+        String vueReponse;
+        UserDao userDao = new UserDao();
+        Proprietaire user = new Proprietaire();
+        try {
+
+            if(request.getParameter("txtNom")!="")
+            {
+                user.setNom_proprietaire(request.getParameter("txtNom").toString());
+            }
+            
+            if(request.getParameter("txtPrenom")!="")
+            {
+                user.setPrenom_proprietaire(request.getParameter("txtPrenom").toString());
+            }
+            
+            if(request.getParameter("txtLogin")!="")
+            {
+                user.setLogin(request.getParameter("txtLogin").toString());
+            }
+            
+            if(request.getParameter("txtPwd")!="" && request.getParameter("txtConfPwd")!="")
+            {
+                if(request.getParameter("txtPwd").equalsIgnoreCase(request.getParameter("txtConfPwd")))
+                {
+                    user.setPwd(request.getParameter("txtPwd").toString());
+                }
+            }
+            
+            userDao.ajouter(user);
+            
+            vueReponse = "/login.jsp";
             return (vueReponse);
         } catch (Exception e) {
             throw e;
@@ -68,6 +114,9 @@ public class slUser extends HttpServlet {
         demande = demande.substring(demande.lastIndexOf("/") + 1);
         return demande;
     }
+    
+    
+
 
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
